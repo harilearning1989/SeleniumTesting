@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -12,6 +13,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class FacebookTest {
@@ -75,7 +77,7 @@ public class FacebookTest {
         }
     }
 
-    @Test
+    //@Test
     public void testPartialLinkText() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Create new account")).click();
@@ -90,7 +92,7 @@ public class FacebookTest {
     /**
      * this method is for click on new button and click on Privacy
      */
-    @Test
+    //@Test
     public void testCreateNewAccount() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Create new account")).click();
@@ -98,6 +100,44 @@ public class FacebookTest {
         driver.findElement(By.id("privacy-link")).click();
         try {
             TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //@Test
+    public void testCreateNewAccountRadio() {
+        driver.get("https://www.facebook.com/");
+        driver.findElement(By.partialLinkText("Create new account")).click();
+        driver.findElement(By.xpath("//label[normalize-space()='Female']")).click();
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testCreateNewAccountAllRadio() {
+        driver.get("https://www.facebook.com/");
+        driver.findElement(By.partialLinkText("Create new account")).click();
+        List<WebElement> webElements = driver.findElements(By.xpath("//input[@id='sex']"));
+        Assert.assertEquals(webElements.size(), 3);
+        WebElement dayDropDown = driver.findElement(By.id("day"));
+        Select daySelect = new Select(dayDropDown);
+        daySelect.selectByIndex(6);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+            daySelect.selectByValue("10");
+            TimeUnit.SECONDS.sleep(1);
+            daySelect.selectByVisibleText("8");
+            for (WebElement webElement : webElements) {
+                webElement.click();
+                TimeUnit.SECONDS.sleep(1);
+            }
+            TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
