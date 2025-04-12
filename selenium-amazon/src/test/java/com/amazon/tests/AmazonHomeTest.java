@@ -54,4 +54,6 @@ public class AmazonHomeTest extends BaseTest {
         // Click the first product
         firstProduct.click();
     }
+
+
 }

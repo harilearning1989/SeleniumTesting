@@ -2,6 +2,7 @@ package com.fb.tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -36,7 +37,7 @@ public class FacebookTest {
         }
     }
 
-    //@Test
+    @Test
     public void openFacebook() {
         driver.get("https://www.facebook.com/");
         System.out.println("Open Facebook URL::" + driver.getCurrentUrl());
@@ -55,7 +56,7 @@ public class FacebookTest {
 
     }
 
-    //@Test
+    @Test
     public void testLinkText() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.linkText("Forgotten password?")).click();
@@ -66,7 +67,7 @@ public class FacebookTest {
         }
     }
 
-    //@Test
+    @Test
     public void testPartialLinkTextTmp() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Forgotten password?")).click();
@@ -77,7 +78,7 @@ public class FacebookTest {
         }
     }
 
-    //@Test
+    @Test
     public void testPartialLinkText() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Create new account")).click();
@@ -92,7 +93,7 @@ public class FacebookTest {
     /**
      * this method is for click on new button and click on Privacy
      */
-    //@Test
+    @Test
     public void testCreateNewAccount() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Create new account")).click();
@@ -105,7 +106,7 @@ public class FacebookTest {
         }
     }
 
-    //@Test
+    @Test
     public void testCreateNewAccountRadio() {
         driver.get("https://www.facebook.com/");
         driver.findElement(By.partialLinkText("Create new account")).click();
@@ -128,11 +129,24 @@ public class FacebookTest {
         Select daySelect = new Select(dayDropDown);
         daySelect.selectByIndex(6);
 
+        //selecting month
+        WebElement monthDropDown = driver.findElement(By.id("month"));
+        Select monthSelect = new Select(monthDropDown);
+        monthSelect.selectByIndex(6);
+
+        List<WebElement> options =monthSelect.getOptions();
+
         try {
+            for (WebElement option : options) {
+                option.click();
+                TimeUnit.SECONDS.sleep(1);
+            }
             TimeUnit.SECONDS.sleep(1);
             daySelect.selectByValue("10");
+            monthSelect.selectByValue("8");
             TimeUnit.SECONDS.sleep(1);
             daySelect.selectByVisibleText("8");
+            monthSelect.selectByVisibleText("Jan");
             for (WebElement webElement : webElements) {
                 webElement.click();
                 TimeUnit.SECONDS.sleep(1);
@@ -141,5 +155,18 @@ public class FacebookTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testKeyboardActions() throws InterruptedException {
+        driver.get("https://www.google.com/");
+        /*WebElement webElement = driver.findElement(By.className("gLFyf"));
+        webElement.sendKeys("java");
+        webElement.sendKeys(Keys.ENTER);*/
+        List<WebElement> allTags = driver.findElements(By.tagName("a"));
+        for (WebElement webElement : allTags) {
+            System.out.println("Text::"+webElement.getText()+"===HREF::"+webElement.getAttribute("href"));
+        }
+        TimeUnit.SECONDS.sleep(5);
     }
 }
